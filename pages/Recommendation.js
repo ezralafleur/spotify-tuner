@@ -1,7 +1,9 @@
 import Image from "next/image";
 
 export default function Recommendation({ title, artists, link, image }) {
-  return (
+  const isServer = () => typeof window === `undefined`;
+
+  return isServer() ? null : (
     <div className="card card-compact shadow-xl recommendation">
       <figure>
         <Image
