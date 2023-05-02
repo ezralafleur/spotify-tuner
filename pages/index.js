@@ -1,118 +1,227 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React, { useState } from "react";
+import Head from "next/head";
+import Genre from "./Genre";
+import Recommendation from "./Recommendation";
 
-const inter = Inter({ subsets: ['latin'] })
+export default function Home({ auth_token, genres }) {
+  const [recommendations, setRecommendations] = useState([]);
+  const [genreSelection, setGenreSelection] = useState([]);
 
-export default function Home() {
+  const [attributes, setAttributes] = useState([
+    { name: "acousticness", min: 0, max: 1, value: 0, active: false },
+    { name: "danceability", min: 0, max: 1, value: 0, active: false },
+    { name: "energy", min: 0, max: 1, value: 0, active: false },
+    { name: "instrumentalness", min: 0, max: 1, value: 0, active: false },
+    { name: "liveness", min: 0, max: 1, value: 0, active: false },
+    { name: "loudness", min: 0, max: 1, value: 0, active: false },
+    { name: "popularity", min: 0, max: 100, value: 0, active: false },
+    { name: "speechiness", min: 0, max: 1, value: 0, active: false },
+    { name: "tempo", min: 0, max: 300, value: 0, active: false },
+    { name: "valence", min: 0, max: 1, value: 0, active: false },
+  ]);
+
+  function toggleGenre(genreName) {
+    if (genreSelection.length == 5) {
+      return;
+    } else if (genreSelection.includes(genreName)) {
+      setGenreSelection(genreSelection.filter((item) => item !== genreName));
+    } else {
+      setGenreSelection([...genreSelection, genreName]);
+    }
+  }
+
+  function handleAttributeChange(attributeName, newValue) {
+    let newAttributes = attributes.map((attribute) => {
+      if (attribute.name == attributeName) {
+        attribute.value = newValue;
+        return attribute;
+      } else {
+        return attribute;
+      }
+    });
+
+    setAttributes([...newAttributes]);
+  }
+
+  function toggleActivation(attributeName) {
+    let newAttributes = attributes.map((attribute) => {
+      if (attribute.name == attributeName) {
+        attribute.active = !attribute.active;
+        return attribute;
+      } else {
+        return attribute;
+      }
+    });
+
+    setAttributes([...newAttributes]);
+  }
+
+  function getRecommendations() {
+    let activeAttributes = attributes.filter((attribute) => attribute.active);
+
+    fetch("api/recommendations", {
+      method: "POST",
+      body: JSON.stringify({
+        genres: genreSelection,
+        attributes: activeAttributes,
+      }),
+      headers: { token: auth_token },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => setRecommendations(json));
+  }
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div id="appBody" className="">
+      <Head>
+        <title>Tune Spotify</title>
+      </Head>
+      <div id="sidebar">
+        <h1 className="text-5xl">Tune Spotify</h1>
+        <br />
+        <ul className="steps steps-vertical">
+          <li
+            className={genreSelection.length > 0 ? "step step-primary" : "step"}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            Select Genres
+          </li>
+          <li className="step">Adjust attributes</li>
+          <li className="step">Get Results</li>
+        </ul>
+      </div>
+      <div id="actionContainer" className="flex flex-col items-center">
+        <div id="genreContainer" className="border rounded m-10 p-5">
+          <h2 className="text-2xl font-bold">Select Genres</h2>
+          <h3 className="text-md font-extralight">
+            Choose between one and five genres to base recommendations on
+          </h3>
+          <br />
+          {genres.map((genre, index) => {
+            return (
+              <Genre
+                key={index}
+                name={genre}
+                isActive={false}
+                onClick={(e) => {
+                  genreSelection.length == 5 ? "" : toggleGenre(genre);
+                }}
+              ></Genre>
+            );
+          })}
+        </div>
+        <div id="tunerContainer" className="border rounded m-10 p-5">
+          <h2 className="text-2xl font-bold">Adjust Attributes</h2>
+          <h3 className="text-md font-extralight">
+            Use attributes to further dial in recommendations
+          </h3>
+          {attributes.map((attribute, index) => {
+            return (
+              <div
+                key={index}
+                className="card card-bordered card-compact attributeContainer p-5 m-5 w-5/12"
+              >
+                <label
+                  className="card-title capitalize text-base rangeLabel"
+                  htmlFor={attribute.name + "Range"}
+                >
+                  {attribute.name}
+                </label>
+                <div className="card-actions">
+                  <label
+                    className="text-xs activateLabel"
+                    htmlFor={attribute.name + "Activate"}
+                  >
+                    Use this attribute
+                  </label>
+                  <input
+                    className="toggle toggle-success toggle-sm activateCheckbox"
+                    id={attribute.name + "Activate"}
+                    type="checkbox"
+                    onChange={() => toggleActivation(attribute.name)}
+                  />
+
+                  <br></br>
+                  <input
+                    type="range"
+                    className="range range-xs attributeRange"
+                    name={attribute.name}
+                    id={attribute.name + "Range"}
+                    min={attribute.min}
+                    max={attribute.max}
+                    defaultValue={attribute.value}
+                    step={attribute.max / 10}
+                    onChange={(e) => {
+                      handleAttributeChange(attribute.name, e.target.value);
+                    }}
+                  ></input>
+                  <span className="attributeValue">{attribute.value}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <button
+          id="recommendationsButton"
+          onClick={getRecommendations}
+          className="btn btn-lg"
+        >
+          Get Recommendations
+        </button>
+        <div id="recommendationsContainer" className="m-10 p-5">
+          {recommendations.map((song, index) => {
+            return (
+              <Recommendation
+                key={index}
+                title={JSON.stringify(song.name)}
+                artists={song.artists}
+                image={song.album.images[0]}
+                link={JSON.stringify(song.href)}
+              >
+                {JSON.stringify(song)}
+              </Recommendation>
+            );
+          })}
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+export async function getServerSideProps() {
+  const CLIENT_ID = process.env.CLIENT_ID;
+  const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+  const auth_key = Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString(
+    "base64"
+  );
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+  const auth_response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    body: new URLSearchParams({ grant_type: "client_credentials" }),
+    headers: {
+      Authorization: "Basic " + auth_key,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  }).then((response) => {
+    return response.json();
+  });
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
+  let auth_token = await auth_response.access_token;
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+  const GENRE_ENDPOINT =
+    "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+
+  const auth_header = { Authorization: "Bearer " + auth_token };
+
+  const genres = await fetch(GENRE_ENDPOINT, { headers: auth_header })
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      return json.genres;
+    });
+
+  return { props: { auth_token, genres } };
 }
