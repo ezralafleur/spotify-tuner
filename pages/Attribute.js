@@ -32,7 +32,7 @@ export default function Attribute({
         <br></br>
         <input
           type="range"
-          className="range range-xs attributeRange w-9/12 lg:w-10/12"
+          className="range range-s lg:range-xs attributeRange w-9/12 lg:w-10/12"
           name={name}
           id={name + "Range"}
           min={min}

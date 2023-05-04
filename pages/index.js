@@ -116,7 +116,7 @@ export default function Home({ auth_token, initialGenres }) {
         <title>Spotify Tuner</title>
       </Head>
       {errorMessage ? (
-        <div class="toast toast-top toast-center z-10">
+        <div class="toast toast-top toast-center z-20">
           <div class="alert alert-error">
             <div>
               <span>{errorMessage}</span>
@@ -126,7 +126,7 @@ export default function Home({ auth_token, initialGenres }) {
       ) : (
         ""
       )}
-      <div id="sidebar" className="col-span-1">
+      <div id="sidebar" className="col-span-1 sticky -top-20 bg-white/80 z-10">
         <div className="mt-5 lg:mt-8">
           <h1 className="text-4xl text-center lg:text-5xl">Spotify Tuner</h1>
         </div>
