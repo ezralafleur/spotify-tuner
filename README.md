@@ -8,6 +8,10 @@ It uses the Spotify API to get recommendations but does not require the user to 
 
 To use Spotify Tuner, navigate to [spotifytuner.aton.al](https://spotifytuner.aton.al) in your web browser.
 
+![genre selection](screenshots/genres.png)
+![attribute selection](screenshots/attributes.png)
+![results](screenshots/results.png)
+
 ## Key Features
 
 - Ability to adjust characteristics such as tempo, energy, and valence to get customized song recommendations

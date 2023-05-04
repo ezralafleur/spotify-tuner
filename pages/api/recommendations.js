@@ -22,7 +22,6 @@ export default function handler(req, res) {
 
   fetch(recommendations_url, { headers: AUTH_HEADER })
     .then((response) => {
-      console.log("getting data from " + recommendations_url);
       return response.json();
     })
     .then((recommendations) => {
@@ -38,7 +37,6 @@ export default function handler(req, res) {
 
       fetch(features_url, { headers: AUTH_HEADER })
         .then((response) => {
-          console.log("getting attributes from " + features_url);
           return response.json();
         })
         .then((features) => {
