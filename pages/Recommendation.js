@@ -1,7 +1,11 @@
 import Image from "next/image";
 
-export default function Recommendation({ title, artists, link, image }) {
+export default function Recommendation({ track }) {
   const isServer = () => typeof window === `undefined`;
+  let title = track.name;
+  let artists = track.artists;
+  let image = track.album.images[0];
+  let link = "http://open.spotify.com/track/" + track.id;
 
   return isServer() ? null : (
     <div className="card card-compact shadow-xl inline-block m-3 max-w-[275px]">

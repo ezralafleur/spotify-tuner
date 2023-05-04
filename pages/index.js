@@ -165,7 +165,7 @@ export default function Home({ auth_token, initialGenres }) {
       </div>
       <div
         id="actionContainer"
-        className="flex flex-col items-center col-span-4 ml-5 mt-5 lg:mt-10"
+        className="flex flex-col items-center col-span-4 mx-5 mt-5 lg:mt-10"
       >
         <div id="genreContainer" className="border rounded p-5 w-full">
           <h2 className="text-2xl font-bold">Select Genres</h2>
@@ -222,17 +222,7 @@ export default function Home({ auth_token, initialGenres }) {
           className=" p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           {recommendations.map((song, index) => {
-            return (
-              <Recommendation
-                key={index}
-                title={song.name}
-                artists={song.artists}
-                image={song.album.images[0]}
-                link={"http://open.spotify.com/track/" + song.id}
-              >
-                {JSON.stringify(song)}
-              </Recommendation>
-            );
+            return <Recommendation key={index} track={song}></Recommendation>;
           })}
         </div>
       </div>
@@ -250,14 +240,19 @@ export async function getServerSideProps() {
 
   const auth_response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
+    timeout: 5000,
     body: new URLSearchParams({ grant_type: "client_credentials" }),
     headers: {
       Authorization: "Basic " + auth_key,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-  }).then((response) => {
-    return response.json();
-  });
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   let auth_token = await auth_response.access_token;
 
@@ -272,6 +267,9 @@ export async function getServerSideProps() {
     })
     .then((json) => {
       return json.genres;
+    })
+    .catch((error) => {
+      console.log(error);
     });
 
   const initialGenres = genreNames.map((genreName) => {

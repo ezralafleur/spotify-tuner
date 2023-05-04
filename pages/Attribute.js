@@ -43,7 +43,7 @@ export default function Attribute({
             handleAttributeChange(name, e.target.value);
           }}
         ></input>
-        <span className="attributeValue ml-6">{value}</span>
+        <span className="attributeValue ml-5 text-xs">{value}</span>
       </div>
     </div>
   );
