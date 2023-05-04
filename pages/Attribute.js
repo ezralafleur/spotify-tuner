@@ -8,7 +8,7 @@ export default function Attribute({
   handleAttributeChange,
 }) {
   return (
-    <div className="card card-bordered card-compact attributeContainer p-5 m-5 w-5/12">
+    <div className="card card-bordered card-compact attributeContainer p-5">
       <label
         className="card-title capitalize text-base rangeLabel"
         htmlFor={name + "Range"}
@@ -32,7 +32,7 @@ export default function Attribute({
         <br></br>
         <input
           type="range"
-          className="range range-xs attributeRange"
+          className="range range-s lg:range-xs attributeRange w-9/12 lg:w-10/12"
           name={name}
           id={name + "Range"}
           min={min}
@@ -43,7 +43,7 @@ export default function Attribute({
             handleAttributeChange(name, e.target.value);
           }}
         ></input>
-        <span className="attributeValue">{value}</span>
+        <span className="attributeValue ml-6">{value}</span>
       </div>
     </div>
   );
