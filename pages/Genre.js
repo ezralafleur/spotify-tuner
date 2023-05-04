@@ -5,9 +5,8 @@ function Genre({ name, onClick, isActive, disabled }) {
     <button
       disabled={disabled}
       className={
-        isActive
-          ? "btn btn-info btn-sm genreButton"
-          : "btn btn-outline btn-sm genreButton"
+        "btn btn-xs md:btn-sm genreButton m-1 " +
+        (isActive ? "btn-info" : "btn-outline")
       }
       onClick={() => {
         onClick();

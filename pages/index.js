@@ -107,7 +107,11 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   return (
-    <div id="appBody" data-theme="lofi">
+    <div
+      id="appBody"
+      data-theme="lofi"
+      className="grid grid-cols-1 lg:grid-cols-5"
+    >
       <Head>
         <title>Spotify Tuner</title>
       </Head>
@@ -122,10 +126,14 @@ export default function Home({ auth_token, initialGenres }) {
       ) : (
         ""
       )}
-      <div id="sidebar">
-        <h1 className="text-5xl">Spotify Tuner</h1>
-        <br />
-        <ul className="steps steps-vertical">
+      <div id="sidebar" className="col-span-1">
+        <div className="mt-5 lg:mt-8">
+          <h1 className="text-4xl text-center lg:text-5xl">Spotify Tuner</h1>
+        </div>
+        <ul
+          id="steps"
+          className="steps sticky  top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
+        >
           <li
             className={
               getActiveGenres().length > 0 ? "step step-primary" : "step"
@@ -142,13 +150,22 @@ export default function Home({ auth_token, initialGenres }) {
           >
             Adjust Attributes
           </li>
-          <li className={upToDate ? "step step-primary" : "step"}>
+          <li
+            className={
+              upToDate
+                ? "step break-after-column step-primary"
+                : "step break-after-column"
+            }
+          >
             Get Results
           </li>
         </ul>
       </div>
-      <div id="actionContainer" className="flex flex-col items-center">
-        <div id="genreContainer" className="border rounded m-10 p-5">
+      <div
+        id="actionContainer"
+        className="flex flex-col items-center col-span-4 ml-5 mt-5 lg:mt-10"
+      >
+        <div id="genreContainer" className="border rounded p-5 w-full">
           <h2 className="text-2xl font-bold">Select Genres</h2>
           <h3 className="text-md font-extralight">
             You must select at least one genre and may select up to five
@@ -166,11 +183,16 @@ export default function Home({ auth_token, initialGenres }) {
             );
           })}
         </div>
-        <div id="attributeContainer" className="border rounded m-10 p-5">
-          <h2 className="text-2xl font-bold">Adjust Attributes</h2>
-          <h3 className="text-md font-extralight">
-            Optionally, use attributes to further dial in recommendations
-          </h3>
+        <div
+          id="attributeContainer"
+          className="border rounded inline-block m-1 md:m-10 p-5 grid md:grid-cols-2 lg:grid-cols-3 gap-4 w-full"
+        >
+          <div className="md:col-span-2 lg:col-span-3">
+            <h2 className="text-2xl font-bold">Adjust Attributes</h2>
+            <h3 className="text-md font-extralight">
+              Optionally, use attributes to further dial in recommendations
+            </h3>
+          </div>
           {attributes.map((attribute, index) => {
             return (
               <Attribute
@@ -189,7 +211,7 @@ export default function Home({ auth_token, initialGenres }) {
         <button
           id="recommendationsButton"
           onClick={getRecommendations}
-          className="btn btn-lg"
+          className="btn btn-lg mt-3"
         >
           Get Recommendations
         </button>
