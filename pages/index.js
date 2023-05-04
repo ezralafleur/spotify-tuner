@@ -8,6 +8,7 @@ export default function Home({ auth_token, initialGenres }) {
   const [recommendations, setRecommendations] = useState([]);
   const [genres, setGenres] = useState(initialGenres);
   const [upToDate, setUpToDate] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   const [attributes, setAttributes] = useState([
     { name: "acousticness", min: 0, max: 1, value: 0, active: false },
@@ -24,6 +25,7 @@ export default function Home({ auth_token, initialGenres }) {
 
   function handleAttributeChange(attributeName, newValue) {
     setUpToDate(false);
+    setErrorMessage("");
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
         attribute.active = true;
@@ -52,6 +54,10 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   function getRecommendations() {
+    if (getActiveGenres().length < 1) {
+      setErrorMessage("You must select at least one genre");
+      return;
+    }
     setUpToDate(true);
 
     let activeAttributes = attributes.filter((attribute) => attribute.active);
@@ -86,6 +92,7 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   function toggleGenre(genreName) {
+    setErrorMessage("");
     let newGenres = genres.map((genre) => {
       if (genre.name == genreName) {
         if (!atMaxGenres() || genre.active) {
@@ -104,6 +111,17 @@ export default function Home({ auth_token, initialGenres }) {
       <Head>
         <title>Spotify Tuner</title>
       </Head>
+      {errorMessage ? (
+        <div class="toast toast-top toast-center z-10">
+          <div class="alert alert-error">
+            <div>
+              <span>{errorMessage}</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <div id="sidebar">
         <h1 className="text-5xl">Spotify Tuner</h1>
         <br />
