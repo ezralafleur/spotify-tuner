@@ -184,10 +184,10 @@ export default function Home({ auth_token, initialGenres }) {
             return (
               <Recommendation
                 key={index}
-                title={JSON.stringify(song.name)}
+                title={song.name}
                 artists={song.artists}
                 image={song.album.images[0]}
-                link={JSON.stringify(song.href)}
+                link={song.href}
               >
                 {JSON.stringify(song)}
               </Recommendation>
