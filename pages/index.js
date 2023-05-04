@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Genre from "./Genre";
 import Recommendation from "./Recommendation";
+import Attribute from "./Attribute";
 
 export default function Home({ auth_token, initialGenres }) {
   const [recommendations, setRecommendations] = useState([]);
@@ -30,6 +31,10 @@ export default function Home({ auth_token, initialGenres }) {
     });
 
     setAttributes([...newAttributes]);
+  }
+
+  function getActiveAttributes() {
+    return attributes.filter((attribute) => attribute.active);
   }
 
   function setActivation(attributeName, isChecked) {
@@ -104,7 +109,13 @@ export default function Home({ auth_token, initialGenres }) {
           >
             Select Genres
           </li>
-          <li className="step">Adjust attributes</li>
+          <li
+            className={
+              getActiveAttributes().length > 0 ? "step step-primary" : "step"
+            }
+          >
+            Adjust Attributes
+          </li>
           <li className="step">Get Results</li>
         </ul>
       </div>
@@ -127,57 +138,23 @@ export default function Home({ auth_token, initialGenres }) {
             );
           })}
         </div>
-        <div id="tunerContainer" className="border rounded m-10 p-5">
+        <div id="attributeContainer" className="border rounded m-10 p-5">
           <h2 className="text-2xl font-bold">Adjust Attributes</h2>
           <h3 className="text-md font-extralight">
             Optionally, use attributes to further dial in recommendations
           </h3>
           {attributes.map((attribute, index) => {
             return (
-              <div
+              <Attribute
                 key={index}
-                className="card card-bordered card-compact attributeContainer p-5 m-5 w-5/12"
-              >
-                <label
-                  className="card-title capitalize text-base rangeLabel"
-                  htmlFor={attribute.name + "Range"}
-                >
-                  {attribute.name}
-                </label>
-                <div className="card-actions">
-                  <label
-                    className="text-xs activateLabel"
-                    htmlFor={attribute.name + "Activate"}
-                  >
-                    Use this attribute
-                  </label>
-                  <input
-                    className="toggle toggle-success toggle-sm activateCheckbox"
-                    id={attribute.name + "Activate"}
-                    checked={attribute.active}
-                    type="checkbox"
-                    onChange={(e) => {
-                      setActivation(attribute.name, e.target.checked);
-                    }}
-                  />
-
-                  <br></br>
-                  <input
-                    type="range"
-                    className="range range-xs attributeRange"
-                    name={attribute.name}
-                    id={attribute.name + "Range"}
-                    min={attribute.min}
-                    max={attribute.max}
-                    defaultValue={attribute.value}
-                    step={attribute.max / 10}
-                    onChange={(e) => {
-                      handleAttributeChange(attribute.name, e.target.value);
-                    }}
-                  ></input>
-                  <span className="attributeValue">{attribute.value}</span>
-                </div>
-              </div>
+                name={attribute.name}
+                active={attribute.active}
+                value={attribute.value}
+                min={attribute.min}
+                max={attribute.max}
+                setActivation={setActivation}
+                handleAttributeChange={handleAttributeChange}
+              ></Attribute>
             );
           })}
         </div>
