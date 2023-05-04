@@ -31,10 +31,10 @@ export default function Home({ auth_token, initialGenres }) {
     setAttributes([...newAttributes]);
   }
 
-  function toggleActivation(attributeName) {
+  function setActivation(attributeName, isChecked) {
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
-        attribute.active = !attribute.active;
+        attribute.active = isChecked;
       }
       return attribute;
     });
@@ -46,6 +46,9 @@ export default function Home({ auth_token, initialGenres }) {
     let activeAttributes = attributes.filter((attribute) => attribute.active);
 
     let genreSelection = getActiveGenres();
+
+    console.log("genres: " + genreSelection.toString());
+    console.log("attributes: " + activeAttributes.toString());
 
     fetch("api/recommendations", {
       method: "POST",
@@ -149,7 +152,9 @@ export default function Home({ auth_token, initialGenres }) {
                     className="toggle toggle-success toggle-sm activateCheckbox"
                     id={attribute.name + "Activate"}
                     type="checkbox"
-                    onChange={() => toggleActivation(attribute.name)}
+                    onChange={(e) => {
+                      setActivation(attribute.name, e.target.checked);
+                    }}
                   />
 
                   <br></br>
