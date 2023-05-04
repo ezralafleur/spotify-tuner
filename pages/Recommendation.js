@@ -24,9 +24,13 @@ export default function Recommendation({ title, artists, link, image }) {
         })}
       </div>
       <div className="card-actions">
-        <button className="btn primary-btn btn-wide btn-sm" href={link}>
+        <a
+          className="btn primary-btn btn-wide btn-sm"
+          href={link}
+          target="_blank"
+        >
           Open in Spotify
-        </button>
+        </a>
       </div>
     </div>
   );

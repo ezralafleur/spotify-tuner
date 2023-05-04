@@ -7,6 +7,7 @@ import Attribute from "./Attribute";
 export default function Home({ auth_token, initialGenres }) {
   const [recommendations, setRecommendations] = useState([]);
   const [genres, setGenres] = useState(initialGenres);
+  const [upToDate, setUpToDate] = useState(false);
 
   const [attributes, setAttributes] = useState([
     { name: "acousticness", min: 0, max: 1, value: 0, active: false },
@@ -22,6 +23,7 @@ export default function Home({ auth_token, initialGenres }) {
   ]);
 
   function handleAttributeChange(attributeName, newValue) {
+    setUpToDate(false);
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
         attribute.active = true;
@@ -38,6 +40,7 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   function setActivation(attributeName, isChecked) {
+    setUpToDate(false);
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
         attribute.active = isChecked;
@@ -49,6 +52,8 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   function getRecommendations() {
+    setUpToDate(true);
+
     let activeAttributes = attributes.filter((attribute) => attribute.active);
 
     let genreSelection = getActiveGenres().map((genre) => {
@@ -84,6 +89,7 @@ export default function Home({ auth_token, initialGenres }) {
     let newGenres = genres.map((genre) => {
       if (genre.name == genreName) {
         if (!atMaxGenres() || genre.active) {
+          setUpToDate(false);
           genre.active = !genre.active;
         }
       }
@@ -111,12 +117,16 @@ export default function Home({ auth_token, initialGenres }) {
           </li>
           <li
             className={
-              getActiveAttributes().length > 0 ? "step step-primary" : "step"
+              getActiveAttributes().length > 0 || upToDate
+                ? "step step-primary"
+                : "step"
             }
           >
             Adjust Attributes
           </li>
-          <li className="step">Get Results</li>
+          <li className={upToDate ? "step step-primary" : "step"}>
+            Get Results
+          </li>
         </ul>
       </div>
       <div id="actionContainer" className="flex flex-col items-center">
