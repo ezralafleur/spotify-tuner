@@ -4,7 +4,7 @@ export default function Recommendation({ title, artists, link, image }) {
   const isServer = () => typeof window === `undefined`;
 
   return isServer() ? null : (
-    <div className="card card-compact shadow-xl recommendation">
+    <div className="card card-compact shadow-xl inline-block m-3 max-w-[275px]">
       <figure>
         <Image
           src={image.url}
@@ -23,9 +23,9 @@ export default function Recommendation({ title, artists, link, image }) {
           );
         })}
       </div>
-      <div className="card-actions">
+      <div className="card-actions mt-7">
         <a
-          className="btn primary-btn btn-wide btn-sm"
+          className="btn primary-btn btn-sm w-full absolute bottom-0"
           href={link}
           target="_blank"
         >

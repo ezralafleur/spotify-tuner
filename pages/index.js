@@ -132,7 +132,7 @@ export default function Home({ auth_token, initialGenres }) {
         </div>
         <ul
           id="steps"
-          className="steps sticky  top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
+          className="steps sticky top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
         >
           <li
             className={
@@ -211,11 +211,14 @@ export default function Home({ auth_token, initialGenres }) {
         <button
           id="recommendationsButton"
           onClick={getRecommendations}
-          className="btn btn-lg mt-3"
+          className="btn btn-lg my-10"
         >
           Get Recommendations
         </button>
-        <div id="recommendationsContainer" className="m-10 p-5">
+        <div
+          id="recommendationsContainer"
+          className=" p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
           {recommendations.map((song, index) => {
             return (
               <Recommendation
