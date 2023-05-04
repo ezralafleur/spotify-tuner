@@ -138,8 +138,9 @@ export default function Home({ auth_token, initialGenres }) {
             className={
               getActiveGenres().length > 0 ? "step step-primary" : "step"
             }
+            href="#genreContainer"
           >
-            Select Genres
+            <a href="#genreContainer">Select Genres</a>
           </li>
           <li
             className={
@@ -148,8 +149,9 @@ export default function Home({ auth_token, initialGenres }) {
                 : "step"
             }
           >
-            Adjust Attributes
+            <a href="#attributeContainer">Adjust Attributes</a>
           </li>
+
           <li
             className={
               upToDate
@@ -157,7 +159,7 @@ export default function Home({ auth_token, initialGenres }) {
                 : "step break-after-column"
             }
           >
-            Get Results
+            <a href="#recommendationsContainer">Get Results</a>
           </li>
         </ul>
       </div>
