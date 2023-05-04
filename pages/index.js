@@ -173,7 +173,7 @@ export default function Home({ auth_token, initialGenres }) {
                 title={song.name}
                 artists={song.artists}
                 image={song.album.images[0]}
-                link={song.href}
+                link={"http://open.spotify.com/track/" + song.id}
               >
                 {JSON.stringify(song)}
               </Recommendation>

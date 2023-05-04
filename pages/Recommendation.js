@@ -14,9 +14,7 @@ export default function Recommendation({ title, artists, link, image }) {
         ></Image>
       </figure>
       <div className="card-body">
-        <a href={link} className="card-title songTitle">
-          {title}
-        </a>
+        <span className="card-title songTitle">{title}</span>
         {artists.map((artist, index) => {
           return (
             <span key={index} className="artistName">
@@ -24,6 +22,11 @@ export default function Recommendation({ title, artists, link, image }) {
             </span>
           );
         })}
+      </div>
+      <div className="card-actions">
+        <button className="btn primary-btn btn-wide btn-sm" href={link}>
+          Open in Spotify
+        </button>
       </div>
     </div>
   );
