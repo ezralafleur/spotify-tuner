@@ -2,13 +2,17 @@ import Image from "next/image";
 
 export default function Recommendation({ track }) {
   const isServer = () => typeof window === `undefined`;
-  let title = track.name;
-  let artists = track.artists;
-  let image = track.album.images[0];
-  let link = "http://open.spotify.com/track/" + track.id;
-  let features = track.features;
+  let title, artists, image, link, features;
 
-  let displayFeatures = [
+  if (!isServer()) {
+    title = track.name;
+    artists = track.artists;
+    image = track.album.images[0];
+    link = "http://open.spotify.com/track/" + track.id;
+    features = track.features;
+  }
+
+  const displayFeatures = [
     "danceability",
     "energy",
     "loudness",
