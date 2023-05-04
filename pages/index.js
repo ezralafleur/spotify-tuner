@@ -23,6 +23,7 @@ export default function Home({ auth_token, initialGenres }) {
   function handleAttributeChange(attributeName, newValue) {
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
+        attribute.active = true;
         attribute.value = newValue;
       }
       return attribute;
@@ -45,7 +46,9 @@ export default function Home({ auth_token, initialGenres }) {
   function getRecommendations() {
     let activeAttributes = attributes.filter((attribute) => attribute.active);
 
-    let genreSelection = getActiveGenres();
+    let genreSelection = getActiveGenres().map((genre) => {
+      return genre.name;
+    });
 
     console.log("genres: " + genreSelection.toString());
     console.log("attributes: " + activeAttributes.toString());
@@ -151,6 +154,7 @@ export default function Home({ auth_token, initialGenres }) {
                   <input
                     className="toggle toggle-success toggle-sm activateCheckbox"
                     id={attribute.name + "Activate"}
+                    checked={attribute.active}
                     type="checkbox"
                     onChange={(e) => {
                       setActivation(attribute.name, e.target.checked);
