@@ -3,9 +3,9 @@ import Head from "next/head";
 import Genre from "./Genre";
 import Recommendation from "./Recommendation";
 
-export default function Home({ auth_token, genres }) {
+export default function Home({ auth_token, initialGenres }) {
   const [recommendations, setRecommendations] = useState([]);
-  const [genreSelection, setGenreSelection] = useState([]);
+  const [genres, setGenres] = useState(initialGenres);
 
   const [attributes, setAttributes] = useState([
     { name: "acousticness", min: 0, max: 1, value: 0, active: false },
@@ -20,24 +20,12 @@ export default function Home({ auth_token, genres }) {
     { name: "valence", min: 0, max: 1, value: 0, active: false },
   ]);
 
-  function toggleGenre(genreName) {
-    if (genreSelection.length == 5) {
-      return;
-    } else if (genreSelection.includes(genreName)) {
-      setGenreSelection(genreSelection.filter((item) => item !== genreName));
-    } else {
-      setGenreSelection([...genreSelection, genreName]);
-    }
-  }
-
   function handleAttributeChange(attributeName, newValue) {
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
         attribute.value = newValue;
-        return attribute;
-      } else {
-        return attribute;
       }
+      return attribute;
     });
 
     setAttributes([...newAttributes]);
@@ -47,10 +35,8 @@ export default function Home({ auth_token, genres }) {
     let newAttributes = attributes.map((attribute) => {
       if (attribute.name == attributeName) {
         attribute.active = !attribute.active;
-        return attribute;
-      } else {
-        return attribute;
       }
+      return attribute;
     });
 
     setAttributes([...newAttributes]);
@@ -58,6 +44,8 @@ export default function Home({ auth_token, genres }) {
 
   function getRecommendations() {
     let activeAttributes = attributes.filter((attribute) => attribute.active);
+
+    let genreSelection = getActiveGenres();
 
     fetch("api/recommendations", {
       method: "POST",
@@ -73,17 +61,40 @@ export default function Home({ auth_token, genres }) {
       .then((json) => setRecommendations(json));
   }
 
+  function getActiveGenres() {
+    return genres.filter((genre) => genre.active);
+  }
+
+  function atMaxGenres() {
+    return getActiveGenres().length >= 5;
+  }
+
+  function toggleGenre(genreName) {
+    let newGenres = genres.map((genre) => {
+      if (genre.name == genreName) {
+        if (!atMaxGenres() || genre.active) {
+          genre.active = !genre.active;
+        }
+      }
+      return genre;
+    });
+
+    setGenres(newGenres);
+  }
+
   return (
-    <div id="appBody" className="">
+    <div id="appBody" data-theme="lofi">
       <Head>
-        <title>Tune Spotify</title>
+        <title>Spotify Tuner</title>
       </Head>
       <div id="sidebar">
-        <h1 className="text-5xl">Tune Spotify</h1>
+        <h1 className="text-5xl">Spotify Tuner</h1>
         <br />
         <ul className="steps steps-vertical">
           <li
-            className={genreSelection.length > 0 ? "step step-primary" : "step"}
+            className={
+              getActiveGenres().length > 0 ? "step step-primary" : "step"
+            }
           >
             Select Genres
           </li>
@@ -95,18 +106,17 @@ export default function Home({ auth_token, genres }) {
         <div id="genreContainer" className="border rounded m-10 p-5">
           <h2 className="text-2xl font-bold">Select Genres</h2>
           <h3 className="text-md font-extralight">
-            Choose between one and five genres to base recommendations on
+            You must select at least one genre and may select up to five
           </h3>
           <br />
           {genres.map((genre, index) => {
             return (
               <Genre
                 key={index}
-                name={genre}
-                isActive={false}
-                onClick={(e) => {
-                  genreSelection.length == 5 ? "" : toggleGenre(genre);
-                }}
+                name={genre.name}
+                isActive={genre.active}
+                disabled={atMaxGenres() && !genre.active}
+                onClick={() => toggleGenre(genre.name)}
               ></Genre>
             );
           })}
@@ -114,7 +124,7 @@ export default function Home({ auth_token, genres }) {
         <div id="tunerContainer" className="border rounded m-10 p-5">
           <h2 className="text-2xl font-bold">Adjust Attributes</h2>
           <h3 className="text-md font-extralight">
-            Use attributes to further dial in recommendations
+            Optionally, use attributes to further dial in recommendations
           </h3>
           {attributes.map((attribute, index) => {
             return (
@@ -215,7 +225,7 @@ export async function getServerSideProps() {
 
   const auth_header = { Authorization: "Bearer " + auth_token };
 
-  const genres = await fetch(GENRE_ENDPOINT, { headers: auth_header })
+  const genreNames = await fetch(GENRE_ENDPOINT, { headers: auth_header })
     .then((response) => {
       return response.json();
     })
@@ -223,5 +233,12 @@ export async function getServerSideProps() {
       return json.genres;
     });
 
-  return { props: { auth_token, genres } };
+  const initialGenres = genreNames.map((genreName) => {
+    let genre = {};
+    genre.name = genreName;
+    genre.active = false;
+    return genre;
+  });
+
+  return { props: { auth_token, initialGenres } };
 }

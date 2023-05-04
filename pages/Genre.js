@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 
-function Genre({ name, onClick }) {
-  const [isActive, setIsActive] = useState(false);
-
-  function handleClick() {
-    setIsActive(!isActive);
-    onClick();
-  }
-
+function Genre({ name, onClick, isActive, disabled }) {
   return (
     <button
+      disabled={disabled}
       className={
         isActive
           ? "btn btn-info btn-sm genreButton"
           : "btn btn-outline btn-sm genreButton"
       }
-      onClick={handleClick}
+      onClick={() => {
+        onClick();
+      }}
     >
       {name}
     </button>
