@@ -4,11 +4,9 @@ Spotify Tuner is a web app built on Next.js that allows users to get song recomm
 
 It uses the Spotify API to get recommendations but does not require the user to have a Spotify account.
 
-## Technologies Used
+## Usage
 
-- React
-- Next.js
-- DaisyUI + Tailwind
+To use Spotify Tuner, navigate to [spotify-tuner.vercel.app](https://spotify-tuner.vercel.app) in your web browser.
 
 ## Key Features
 
@@ -16,9 +14,11 @@ It uses the Spotify API to get recommendations but does not require the user to 
 - Can select up to five genres from which to build recommendations
 - Provides song recommendations even without a Spotify account
 
-## Usage
+## Technologies Used
 
-To use Spotify Tuner, navigate to [spotify-tuner.vercel.app](https://spotify-tuner.vercel.app) in your web browser.
+- React
+- Next.js
+- DaisyUI + Tailwind
 
 ## Local Setup
 
@@ -49,5 +49,6 @@ Replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your own Spotify API clie
 
 ## Future development plans
 
+- Get recommendations based on songs and artists instead of just genres
 - Create and save personal playlists
 - Social sharing
