@@ -16,10 +16,10 @@ export default function Home({ auth_token, initialGenres }) {
     { name: "energy", min: 0, max: 1, value: 0, active: false },
     { name: "instrumentalness", min: 0, max: 1, value: 0, active: false },
     { name: "liveness", min: 0, max: 1, value: 0, active: false },
-    { name: "loudness", min: 0, max: 1, value: 0, active: false },
+    { name: "loudness", min: -60, max: 0, value: -60, active: false },
     { name: "popularity", min: 0, max: 100, value: 0, active: false },
     { name: "speechiness", min: 0, max: 1, value: 0, active: false },
-    { name: "tempo", min: 0, max: 300, value: 0, active: false },
+    { name: "tempo", min: 0, max: 240, value: 0, active: false },
     { name: "valence", min: 0, max: 1, value: 0, active: false },
   ]);
 
@@ -66,9 +66,6 @@ export default function Home({ auth_token, initialGenres }) {
       return genre.name;
     });
 
-    console.log("genres: " + genreSelection.toString());
-    console.log("attributes: " + activeAttributes.toString());
-
     fetch("api/recommendations", {
       method: "POST",
       body: JSON.stringify({
@@ -114,6 +111,31 @@ export default function Home({ auth_token, initialGenres }) {
     >
       <Head>
         <title>Spotify Tuner</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/static/icons/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/static/icons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/static/icons/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/static/icons/site.webmanifest" />
+        <link
+          rel="mask-icon"
+          href="/static/icons/safari-pinned-tab.svg"
+          color="#5bbad5"
+        />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff"></meta>
       </Head>
       {errorMessage ? (
         <div class="toast toast-top toast-center z-20">
@@ -128,7 +150,7 @@ export default function Home({ auth_token, initialGenres }) {
       )}
       <div id="sidebar" className="col-span-1 sticky -top-20 bg-white/80 z-10">
         <div className="mt-5 lg:mt-8">
-          <h1 className="text-4xl text-center lg:text-5xl">Spotify Tuner</h1>
+          <h1 className="text-4xl text-center font-semibold">Spotify Tuner</h1>
         </div>
         <ul
           id="steps"
@@ -219,7 +241,7 @@ export default function Home({ auth_token, initialGenres }) {
         </button>
         <div
           id="recommendationsContainer"
-          className=" p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          className="justify-center w-full self-center"
         >
           {recommendations.map((song, index) => {
             return <Recommendation key={index} track={song}></Recommendation>;
