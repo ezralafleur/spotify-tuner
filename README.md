@@ -6,7 +6,7 @@ It uses the Spotify API to get recommendations but does not require the user to 
 
 ## Usage
 
-To use Spotify Tuner, navigate to [spotifytuner.aton.al](spotifytuner.aton.al) in your web browser.
+To use Spotify Tuner, navigate to [spotifytuner.aton.al](https://spotifytuner.aton.al) in your web browser.
 
 ## Key Features
 
