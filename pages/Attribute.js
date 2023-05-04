@@ -38,7 +38,7 @@ export default function Attribute({
           min={min}
           max={max}
           defaultValue={value}
-          step={max / 10}
+          step={(max - min) / 10}
           onChange={(e) => {
             handleAttributeChange(name, e.target.value);
           }}

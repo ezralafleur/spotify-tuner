@@ -16,10 +16,10 @@ export default function Home({ auth_token, initialGenres }) {
     { name: "energy", min: 0, max: 1, value: 0, active: false },
     { name: "instrumentalness", min: 0, max: 1, value: 0, active: false },
     { name: "liveness", min: 0, max: 1, value: 0, active: false },
-    { name: "loudness", min: 0, max: 1, value: 0, active: false },
+    { name: "loudness", min: -60, max: 0, value: -60, active: false },
     { name: "popularity", min: 0, max: 100, value: 0, active: false },
     { name: "speechiness", min: 0, max: 1, value: 0, active: false },
-    { name: "tempo", min: 0, max: 300, value: 0, active: false },
+    { name: "tempo", min: 0, max: 240, value: 0, active: false },
     { name: "valence", min: 0, max: 1, value: 0, active: false },
   ]);
 
@@ -65,9 +65,6 @@ export default function Home({ auth_token, initialGenres }) {
     let genreSelection = getActiveGenres().map((genre) => {
       return genre.name;
     });
-
-    console.log("genres: " + genreSelection.toString());
-    console.log("attributes: " + activeAttributes.toString());
 
     fetch("api/recommendations", {
       method: "POST",
@@ -219,7 +216,7 @@ export default function Home({ auth_token, initialGenres }) {
         </button>
         <div
           id="recommendationsContainer"
-          className=" p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          className="justify-center w-full self-center"
         >
           {recommendations.map((song, index) => {
             return <Recommendation key={index} track={song}></Recommendation>;
