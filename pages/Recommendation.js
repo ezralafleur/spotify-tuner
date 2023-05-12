@@ -13,15 +13,16 @@ export default function Recommendation({ track }) {
   }
 
   const displayFeatures = [
+    "acousticness",
     "danceability",
     "energy",
-    "loudness",
-    "speechiness",
-    "acousticness",
     "instrumentalness",
     "liveness",
-    "valence",
+    "loudness",
+    "popularity",
+    "speechiness",
     "tempo",
+    "valence",
   ];
 
   return isServer() ? null : (

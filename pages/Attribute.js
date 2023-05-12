@@ -1,21 +1,30 @@
 export default function Attribute({
   name,
+  label,
   active,
   value,
   min,
   max,
   setActivation,
   handleAttributeChange,
+  description,
 }) {
   return (
     <div className="card card-bordered card-compact attributeContainer p-5">
       <label
-        className="card-title capitalize text-base rangeLabel"
+        className="card-title text-base rangeLabel"
         htmlFor={name + "Range"}
       >
-        {name}
+        {label}{" "}
+        {description ? (
+          <span className="tooltip" data-tip={description}>
+            <button className="btn btn-xs btn-outline btn-circle">?</button>
+          </span>
+        ) : (
+          ""
+        )}
       </label>
-      <div className="card-actions">
+      <div className="card-actions mt-2">
         <label className="text-xs activateLabel" htmlFor={name + "Activate"}>
           Use this attribute
         </label>
@@ -37,7 +46,7 @@ export default function Attribute({
           id={name + "Range"}
           min={min}
           max={max}
-          defaultValue={value}
+          value={value}
           step={(max - min) / 10}
           onChange={(e) => {
             handleAttributeChange(name, e.target.value);

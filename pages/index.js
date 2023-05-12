@@ -12,16 +12,106 @@ export default function Home({ auth_token, initialGenres }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [attributes, setAttributes] = useState([
-    { name: "acousticness", min: 0, max: 1, value: 0, active: false },
-    { name: "danceability", min: 0, max: 1, value: 0, active: false },
-    { name: "energy", min: 0, max: 1, value: 0, active: false },
-    { name: "instrumentalness", min: 0, max: 1, value: 0, active: false },
-    { name: "liveness", min: 0, max: 1, value: 0, active: false },
-    { name: "loudness", min: -60, max: 0, value: -60, active: false },
-    { name: "popularity", min: 0, max: 100, value: 0, active: false },
-    { name: "speechiness", min: 0, max: 1, value: 0, active: false },
-    { name: "tempo", min: 0, max: 240, value: 0, active: false },
-    { name: "valence", min: 0, max: 1, value: 0, active: false },
+    {
+      name: "acousticness",
+      label: "Acousticness",
+      description:
+        "A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "danceability",
+      label: "Danceability",
+      description:
+        "Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "energy",
+      label: "Energy",
+      description:
+        "Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "instrumentalness",
+      label: "Instrumentalness",
+      description:
+        'Predicts whether a track contains no vocals. "Ooh" and "aah" sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly "vocal". The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0.',
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "liveness",
+      label: "Liveness",
+      description:
+        "Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live.",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "loudness",
+      label: "Loudness",
+      description:
+        "The overall loudness of a track in decibels (dB). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typically range between -60 and 0 db.",
+      min: -60,
+      max: 0,
+      value: -60,
+      active: false,
+    },
+    {
+      name: "popularity",
+      label: "Popularity",
+      description:
+        "The popularity of the track. The value will be between 0 and 100, with 100 being the most popular. The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.",
+      min: 0,
+      max: 100,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "speechiness",
+      label: "Speechiness",
+      description:
+        "Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks.",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "tempo",
+      label: "Tempo",
+      description:
+        "The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration.",
+      min: 0,
+      max: 250,
+      value: 0,
+      active: false,
+    },
+    {
+      name: "valence",
+      label: "Valence",
+      description:
+        "A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).",
+      min: 0,
+      max: 1,
+      value: 0,
+      active: false,
+    },
   ]);
 
   function handleAttributeChange(attributeName, newValue) {
@@ -36,6 +126,17 @@ export default function Home({ auth_token, initialGenres }) {
     });
 
     setAttributes([...newAttributes]);
+  }
+
+  function resetAttributes() {
+    setUpToDate(false);
+    setAttributes(
+      attributes.map((attribute) => {
+        attribute.active = false;
+        attribute.value = attribute.min;
+        return attribute;
+      })
+    );
   }
 
   function getActiveAttributes() {
@@ -90,6 +191,16 @@ export default function Home({ auth_token, initialGenres }) {
 
   function atMaxGenres() {
     return getActiveGenres().length >= 5;
+  }
+
+  function clearGenres() {
+    setUpToDate(false);
+    setGenres(
+      genres.map((genre) => {
+        genre.active = false;
+        return genre;
+      })
+    );
   }
 
   function toggleGenre(genreName) {
@@ -156,6 +267,14 @@ export default function Home({ auth_token, initialGenres }) {
         <div className="mt-5 lg:mt-8">
           <h1 className="text-4xl text-center font-semibold">Spotify Tuner</h1>
         </div>
+        <div id="description" className="border rounded p-5 mx-5 mt-5 text-xs">
+          Get song recommendations from Spotify based on niche characteristics
+          such as danceability and tempo.
+          <br />
+          <br />
+          First, select at least one genre, then optionally tinker with target
+          attributes for recommendations.
+        </div>
         <ul
           id="steps"
           className="steps sticky top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
@@ -210,36 +329,49 @@ export default function Home({ auth_token, initialGenres }) {
               ></Genre>
             );
           })}
+          <br />
+          <br />
+          <button className="btn btn-sm ml-2" onClick={clearGenres}>
+            Clear All
+          </button>
         </div>
         <div
           id="attributeContainer"
-          className="border rounded inline-block m-1 md:m-10 p-5 grid md:grid-cols-2 lg:grid-cols-3 gap-4 w-full"
+          className="border rounded m-1 md:m-10 p-5 w-full"
         >
-          <div className="md:col-span-2 lg:col-span-3">
-            <h2 className="text-2xl font-bold">Adjust Attributes</h2>
-            <h3 className="text-md font-extralight">
-              Optionally, use attributes to further dial in recommendations
-            </h3>
+          <div className="inline-block  grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="md:col-span-2 lg:col-span-3">
+              <h2 className="text-2xl font-bold">Adjust Attributes</h2>
+              <h3 className="text-md font-extralight">
+                Optionally, use attributes to further dial in recommendations
+              </h3>
+            </div>
+            {attributes.map((attribute, index) => {
+              return (
+                <Attribute
+                  key={index}
+                  name={attribute.name}
+                  description={attribute.description}
+                  label={attribute.label}
+                  active={attribute.active}
+                  value={attribute.value}
+                  min={attribute.min}
+                  max={attribute.max}
+                  setActivation={setActivation}
+                  handleAttributeChange={handleAttributeChange}
+                ></Attribute>
+              );
+            })}
           </div>
-          {attributes.map((attribute, index) => {
-            return (
-              <Attribute
-                key={index}
-                name={attribute.name}
-                active={attribute.active}
-                value={attribute.value}
-                min={attribute.min}
-                max={attribute.max}
-                setActivation={setActivation}
-                handleAttributeChange={handleAttributeChange}
-              ></Attribute>
-            );
-          })}
+          <br />
+          <button className="btn btn-sm ml-2" onClick={resetAttributes}>
+            Reset
+          </button>
         </div>
         <button
           id="recommendationsButton"
           onClick={getRecommendations}
-          className="btn btn-lg my-10"
+          className={"btn btn-lg my-10 " + (isLoading ? "loading" : "")}
           disabled={isLoading}
         >
           Get Recommendations
