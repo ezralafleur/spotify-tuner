@@ -44,6 +44,7 @@ export default function Recommendation({ track }) {
           alt="album art"
           height={image.height}
           width={image.width}
+          unoptimized={true}
         ></Image>
       </figure>
       <div className="card-body">

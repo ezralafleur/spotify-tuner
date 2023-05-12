@@ -9,6 +9,7 @@ export default function Home({ auth_token, initialGenres }) {
   const [genres, setGenres] = useState(initialGenres);
   const [upToDate, setUpToDate] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [attributes, setAttributes] = useState([
     { name: "acousticness", min: 0, max: 1, value: 0, active: false },
@@ -66,6 +67,8 @@ export default function Home({ auth_token, initialGenres }) {
       return genre.name;
     });
 
+    setIsLoading(true);
+
     fetch("api/recommendations", {
       method: "POST",
       body: JSON.stringify({
@@ -75,6 +78,7 @@ export default function Home({ auth_token, initialGenres }) {
       headers: { token: auth_token },
     })
       .then((response) => {
+        setIsLoading(false);
         return response.json();
       })
       .then((json) => setRecommendations(json));
@@ -236,6 +240,7 @@ export default function Home({ auth_token, initialGenres }) {
           id="recommendationsButton"
           onClick={getRecommendations}
           className="btn btn-lg my-10"
+          disabled={isLoading}
         >
           Get Recommendations
         </button>
