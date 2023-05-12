@@ -263,17 +263,9 @@ export default function Home({ auth_token, initialGenres }) {
       ) : (
         ""
       )}
-      <div id="sidebar" className="col-span-1 sticky -top-20 bg-white/80 z-10">
+      <div id="sidebar" className="sticky -top-20 col-span-1 bg-white/80 z-10">
         <div className="mt-5 lg:mt-8">
           <h1 className="text-4xl text-center font-semibold">Spotify Tuner</h1>
-        </div>
-        <div id="description" className="border rounded p-5 mx-5 mt-5 text-xs">
-          Get song recommendations from Spotify based on niche characteristics
-          such as danceability and tempo.
-          <br />
-          <br />
-          First, select at least one genre, then optionally tinker with target
-          attributes for recommendations.
         </div>
         <ul
           id="steps"
@@ -310,7 +302,7 @@ export default function Home({ auth_token, initialGenres }) {
       </div>
       <div
         id="actionContainer"
-        className="flex flex-col items-center col-span-4 mx-5 mt-5 lg:mt-10"
+        className="flex flex-col items-center col-span-4 mx-7 mt-5 lg:mt-10"
       >
         <div id="genreContainer" className="border rounded p-5 w-full">
           <h2 className="text-2xl font-bold">Select Genres</h2>

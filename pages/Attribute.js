@@ -17,7 +17,7 @@ export default function Attribute({
       >
         {label}{" "}
         {description ? (
-          <span className="tooltip" data-tip={description}>
+          <span className="tooltip font-light text-xs" data-tip={description}>
             <button className="btn btn-xs btn-outline btn-circle">?</button>
           </span>
         ) : (
