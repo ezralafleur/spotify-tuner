@@ -219,165 +219,177 @@ export default function Home({ auth_token, initialGenres }) {
   }
 
   return (
-    <div
-      id="appBody"
-      data-theme="lofi"
-      className="grid grid-cols-1 lg:grid-cols-5"
-    >
-      <Head>
-        <title>Spotify Tuner</title>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/static/icons/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/static/icons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/static/icons/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/static/icons/site.webmanifest" />
-        <link
-          rel="mask-icon"
-          href="/static/icons/safari-pinned-tab.svg"
-          color="#5bbad5"
-        />
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff"></meta>
-      </Head>
-      {errorMessage ? (
-        <div class="toast toast-top toast-center z-20">
-          <div class="alert alert-error">
-            <div>
-              <span>{errorMessage}</span>
+    <>
+      <script
+        data-goatcounter="https://ezralafleur.goatcounter.com/count"
+        async
+        src="//gc.zgo.at/count.js"
+      ></script>
+      <div
+        id="appBody"
+        data-theme="lofi"
+        className="grid grid-cols-1 lg:grid-cols-5"
+      >
+        <Head>
+          <title>Spotify Tuner</title>
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/static/icons/apple-touch-icon.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/static/icons/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/static/icons/favicon-16x16.png"
+          />
+          <link rel="manifest" href="/static/icons/site.webmanifest" />
+          <link
+            rel="mask-icon"
+            href="/static/icons/safari-pinned-tab.svg"
+            color="#5bbad5"
+          />
+          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="theme-color" content="#ffffff"></meta>
+        </Head>
+        {errorMessage ? (
+          <div class="toast toast-top toast-center z-20">
+            <div class="alert alert-error">
+              <div>
+                <span>{errorMessage}</span>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-      <div id="sidebar" className="sticky -top-20 col-span-1 bg-white/80 z-10">
-        <div className="mt-5 lg:mt-8">
-          <h1 className="text-4xl text-center font-semibold">Spotify Tuner</h1>
-        </div>
-        <ul
-          id="steps"
-          className="steps sticky top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
+        ) : (
+          ""
+        )}
+        <div
+          id="sidebar"
+          className="sticky -top-20 col-span-1 bg-white/80 z-10"
         >
-          <li
-            className={
-              getActiveGenres().length > 0 ? "step step-primary" : "step"
-            }
-            href="#genreContainer"
+          <div className="mt-5 lg:mt-8">
+            <h1 className="text-4xl text-center font-semibold">
+              Spotify Tuner
+            </h1>
+          </div>
+          <ul
+            id="steps"
+            className="steps sticky top-0 m-5 lg:mt-10 lg:ml-10 lg:steps-vertical w-full"
           >
-            <a href="#genreContainer">Select Genres</a>
-          </li>
-          <li
-            className={
-              getActiveAttributes().length > 0 || upToDate
-                ? "step step-primary"
-                : "step"
-            }
-          >
-            <a href="#attributeContainer">Adjust Attributes</a>
-          </li>
+            <li
+              className={
+                getActiveGenres().length > 0 ? "step step-primary" : "step"
+              }
+              href="#genreContainer"
+            >
+              <a href="#genreContainer">Select Genres</a>
+            </li>
+            <li
+              className={
+                getActiveAttributes().length > 0 || upToDate
+                  ? "step step-primary"
+                  : "step"
+              }
+            >
+              <a href="#attributeContainer">Adjust Attributes</a>
+            </li>
 
-          <li
-            className={
-              upToDate
-                ? "step break-after-column step-primary"
-                : "step break-after-column"
-            }
-          >
-            <a href="#recommendationsContainer">Get Results</a>
-          </li>
-        </ul>
-      </div>
-      <div
-        id="actionContainer"
-        className="flex flex-col items-center col-span-4 mx-7 mt-5 lg:mt-10"
-      >
-        <div id="genreContainer" className="border rounded p-5 w-full">
-          <h2 className="text-2xl font-bold">Select Genres</h2>
-          <h3 className="text-md font-extralight">
-            You must select at least one genre and may select up to five
-          </h3>
-          <br />
-          {genres.map((genre, index) => {
-            return (
-              <Genre
-                key={index}
-                name={genre.name}
-                isActive={genre.active}
-                disabled={atMaxGenres() && !genre.active}
-                onClick={() => toggleGenre(genre.name)}
-              ></Genre>
-            );
-          })}
-          <br />
-          <br />
-          <button className="btn btn-sm ml-2" onClick={clearGenres}>
-            Clear All
-          </button>
+            <li
+              className={
+                upToDate
+                  ? "step break-after-column step-primary"
+                  : "step break-after-column"
+              }
+            >
+              <a href="#recommendationsContainer">Get Results</a>
+            </li>
+          </ul>
         </div>
         <div
-          id="attributeContainer"
-          className="border rounded m-1 md:m-10 p-5 w-full"
+          id="actionContainer"
+          className="flex flex-col items-center col-span-4 mx-7 mt-5 lg:mt-10"
         >
-          <div className="inline-block  grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="md:col-span-2 lg:col-span-3">
-              <h2 className="text-2xl font-bold">Adjust Attributes</h2>
-              <h3 className="text-md font-extralight">
-                Optionally, use attributes to further dial in recommendations
-              </h3>
-            </div>
-            {attributes.map((attribute, index) => {
+          <div id="genreContainer" className="border rounded p-5 w-full">
+            <h2 className="text-2xl font-bold">Select Genres</h2>
+            <h3 className="text-md font-extralight">
+              You must select at least one genre and may select up to five
+            </h3>
+            <br />
+            {genres.map((genre, index) => {
               return (
-                <Attribute
+                <Genre
                   key={index}
-                  name={attribute.name}
-                  description={attribute.description}
-                  label={attribute.label}
-                  active={attribute.active}
-                  value={attribute.value}
-                  min={attribute.min}
-                  max={attribute.max}
-                  setActivation={setActivation}
-                  handleAttributeChange={handleAttributeChange}
-                ></Attribute>
+                  name={genre.name}
+                  isActive={genre.active}
+                  disabled={atMaxGenres() && !genre.active}
+                  onClick={() => toggleGenre(genre.name)}
+                ></Genre>
               );
             })}
+            <br />
+            <br />
+            <button className="btn btn-sm ml-2" onClick={clearGenres}>
+              Clear All
+            </button>
           </div>
-          <br />
-          <button className="btn btn-sm ml-2" onClick={resetAttributes}>
-            Reset
+          <div
+            id="attributeContainer"
+            className="border rounded m-1 md:m-10 p-5 w-full"
+          >
+            <div className="inline-block  grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="md:col-span-2 lg:col-span-3">
+                <h2 className="text-2xl font-bold">Adjust Attributes</h2>
+                <h3 className="text-md font-extralight">
+                  Optionally, use attributes to further dial in recommendations
+                </h3>
+              </div>
+              {attributes.map((attribute, index) => {
+                return (
+                  <Attribute
+                    key={index}
+                    name={attribute.name}
+                    description={attribute.description}
+                    label={attribute.label}
+                    active={attribute.active}
+                    value={attribute.value}
+                    min={attribute.min}
+                    max={attribute.max}
+                    setActivation={setActivation}
+                    handleAttributeChange={handleAttributeChange}
+                  ></Attribute>
+                );
+              })}
+            </div>
+            <br />
+            <button className="btn btn-sm ml-2" onClick={resetAttributes}>
+              Reset
+            </button>
+          </div>
+          <button
+            id="recommendationsButton"
+            onClick={getRecommendations}
+            className={"btn btn-lg my-10 " + (isLoading ? "loading" : "")}
+            disabled={isLoading}
+          >
+            Get Recommendations
           </button>
-        </div>
-        <button
-          id="recommendationsButton"
-          onClick={getRecommendations}
-          className={"btn btn-lg my-10 " + (isLoading ? "loading" : "")}
-          disabled={isLoading}
-        >
-          Get Recommendations
-        </button>
-        <div
-          id="recommendationsContainer"
-          className="justify-center w-full self-center"
-        >
-          {recommendations.map((song, index) => {
-            return <Recommendation key={index} track={song}></Recommendation>;
-          })}
+          <div
+            id="recommendationsContainer"
+            className="justify-center w-full self-center"
+          >
+            {recommendations.map((song, index) => {
+              return <Recommendation key={index} track={song}></Recommendation>;
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
